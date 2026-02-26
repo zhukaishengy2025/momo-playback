@@ -4,10 +4,10 @@ set -euo pipefail
 usage() {
   cat <<'EOF'
 Usage:
-  rtmp-segment-record.sh <rtmp_url> <output_dir> [segment_seconds]
+  rtmp-segment-record <rtmp_url> <output_dir> [segment_seconds]
 
 Example:
-  rtmp-segment-record.sh rtmp://127.0.0.1/live/stream ./recordings 5
+  rtmp-segment-record rtmp://127.0.0.1/live/stream ./recordings 5
 EOF
 }
 

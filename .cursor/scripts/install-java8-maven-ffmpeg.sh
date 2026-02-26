@@ -80,7 +80,7 @@ install_java8() {
       exit 1
     fi
 
-    as_root rm -rf "${JAVA8_DIR}"
+    as_root rm -rf "/opt/${extracted_dir}" "${JAVA8_DIR}"
     as_root tar -xzf "${archive}" -C /opt
     as_root mv "/opt/${extracted_dir}" "${JAVA8_DIR}"
     rm -rf "${tmp_dir}"
@@ -139,8 +139,15 @@ export MAVEN_HOME=/opt/maven
 
 case ":$PATH:" in
   *":$JAVA_HOME/bin:"*) ;;
-  *) export PATH="$JAVA_HOME/bin:$MAVEN_HOME/bin:$PATH" ;;
+  *) PATH="$JAVA_HOME/bin:$PATH" ;;
 esac
+
+case ":$PATH:" in
+  *":$MAVEN_HOME/bin:"*) ;;
+  *) PATH="$MAVEN_HOME/bin:$PATH" ;;
+esac
+
+export PATH
 EOF
 
   as_root chmod 0644 "${profile_file}"
