@@ -69,8 +69,14 @@ public class RecordingWorker implements Runnable {
         try {
             Files.createDirectories(outputDir);
             while (running.get()) {
-                launchFfmpeg();
-                superviseCurrentProcess();
+                try {
+                    launchFfmpeg();
+                    superviseCurrentProcess();
+                } catch (Exception e) {
+                    if (running.get()) {
+                        log.warn("ffmpeg launch/supervise failed for recording {}, will retry", recordingId, e);
+                    }
+                }
                 if (running.get()) {
                     sleep(recordingProperties.getRetryDelayMs());
                 }
@@ -122,10 +128,13 @@ public class RecordingWorker implements Runnable {
             if (!Files.exists(outputDir)) {
                 return;
             }
-            List<Path> candidates = Files.list(outputDir)
-                    .filter(path -> path.getFileName().toString().endsWith(".mp4"))
-                    .sorted(Comparator.comparing(Path::toString))
-                    .collect(Collectors.toList());
+            List<Path> candidates;
+            try (java.util.stream.Stream<Path> pathStream = Files.list(outputDir)) {
+                candidates = pathStream
+                        .filter(path -> path.getFileName().toString().endsWith(".mp4"))
+                        .sorted(Comparator.comparing(Path::toString))
+                        .collect(Collectors.toList());
+            }
 
             for (Path candidate : candidates) {
                 if (uploadedFiles.contains(candidate)) {
