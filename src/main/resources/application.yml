@@ -1,0 +1,14 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+recording:
+  ffmpeg-path: ${FFMPEG_PATH:ffmpeg}
+  work-dir: ${RECORDING_WORK_DIR:/tmp/momo-playback}
+  segment-seconds: 60
+  retry-delay-ms: 3000
+
+oss:
+  endpoint: ${OSS_ENDPOINT:https://oss-cn-hangzhou.aliyuncs.com}
+  access-key-id: ${OSS_ACCESS_KEY_ID:${ACCESS_KEY_ID:}}
+  access-key-secret: ${OSS_ACCESS_KEY_SECRET:${ACCESS_KEY_SECRET:}}
+  target-prefix: ${OSS_TARGET_PREFIX:oss://mypifi-test/mytest}
