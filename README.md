@@ -74,7 +74,7 @@ recording:
 
 oss:
   endpoint: ${OSS_ENDPOINT:https://oss-us-west-1.aliyuncs.com}
-  access-key-id: ${OSS_ACCESS_KEY_ID:${ACCESS_KEY_ID:}}
-  access-key-secret: ${OSS_ACCESS_KEY_SECRET:${ACCESS_KEY_SECRET:}}
+  access-key-id: ${OSS_ACCESS_KEY_ID:}
+  access-key-secret: ${OSS_ACCESS_KEY_SECRET:}
   target-prefix: ${OSS_TARGET_PREFIX:oss://mypifi-test/mytest}
 ```
