@@ -23,7 +23,7 @@ Java 8 + Spring Boot 录制服务：接收 RTMP 拉流地址，连续拉流并�
 
 ```bash
 export test_url='rtmp://a/b/c?auth_key=d'
-export OSS_ENDPOINT='https://oss-cn-hangzhou.aliyuncs.com'
+export OSS_ENDPOINT='https://oss-us-west-1.aliyuncs.com'
 export OSS_ACCESS_KEY_ID='你的AccessKey ID'
 export OSS_ACCESS_KEY_SECRET='你的AccessKey Secret'
 export OSS_TARGET_PREFIX='oss://mypifi-test/mytest'
@@ -73,7 +73,7 @@ recording:
   retry-delay-ms: 3000
 
 oss:
-  endpoint: ${OSS_ENDPOINT:https://oss-cn-hangzhou.aliyuncs.com}
+  endpoint: ${OSS_ENDPOINT:https://oss-us-west-1.aliyuncs.com}
   access-key-id: ${OSS_ACCESS_KEY_ID:${ACCESS_KEY_ID:}}
   access-key-secret: ${OSS_ACCESS_KEY_SECRET:${ACCESS_KEY_SECRET:}}
   target-prefix: ${OSS_TARGET_PREFIX:oss://mypifi-test/mytest}
