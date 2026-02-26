@@ -1,0 +1,5 @@
+{
+  "name": "java8-springboot-rtmp",
+  "install": "bash .cursor/scripts/install-java8-maven-ffmpeg.sh",
+  "start": "bash .cursor/scripts/start-cloud-agent-env.sh"
+}
