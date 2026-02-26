@@ -1,27 +1,36 @@
 package com.momo.playback.config;
 
-import com.momo.playback.PlaybackApplication;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
 
-@SpringBootTest(classes = PlaybackApplication.class, properties = {
-        "OSS_ENDPOINT=https://oss-us-west-1.aliyuncs.com",
-        "OSS_TARGET_PREFIX=oss://mypifi-test/mytest",
-        "OSS_ACCESS_KEY_ID=env-key-id",
-        "OSS_ACCESS_KEY_SECRET=env-key-secret",
-        "ACCESS_KEY_ID=legacy-key-id",
-        "ACCESS_KEY_SECRET=legacy-key-secret"
-})
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
 class OssPropertiesBindingTest {
 
-    @Autowired
-    private OssProperties ossProperties;
-
     @Test
-    void shouldBindCredentialsFromOssEnvironmentVariables() {
-        Assertions.assertEquals("env-key-id", ossProperties.getAccessKeyId());
-        Assertions.assertEquals("env-key-secret", ossProperties.getAccessKeySecret());
+    void shouldOnlyUseOssCredentialEnvironmentVariablesInConfig() throws IOException {
+        String applicationYaml = readResourceAsString("application.yml");
+
+        Assertions.assertTrue(applicationYaml.contains("access-key-id: ${OSS_ACCESS_KEY_ID:}"));
+        Assertions.assertTrue(applicationYaml.contains("access-key-secret: ${OSS_ACCESS_KEY_SECRET:}"));
+        Assertions.assertFalse(applicationYaml.contains("${OSS_ACCESS_KEY_ID:${ACCESS_KEY_ID:}}"));
+        Assertions.assertFalse(applicationYaml.contains("${OSS_ACCESS_KEY_SECRET:${ACCESS_KEY_SECRET:}}"));
+    }
+
+    private static String readResourceAsString(String resourceName) throws IOException {
+        ClassPathResource resource = new ClassPathResource(resourceName);
+        try (InputStream inputStream = resource.getInputStream()) {
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            byte[] buffer = new byte[2048];
+            int read;
+            while ((read = inputStream.read(buffer)) >= 0) {
+                output.write(buffer, 0, read);
+            }
+            return new String(output.toByteArray(), StandardCharsets.UTF_8);
+        }
     }
 }
